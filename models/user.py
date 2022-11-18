@@ -3,14 +3,14 @@ from fastapi.security import HTTPBasicCredentials
 from pydantic import BaseModel, EmailStr
 
 
-class Admin(Document):
+class User(Document):
     fullname: str
     email: EmailStr
     password: str
     code: str
 
     class Collection:
-        name = "admin"
+        name = "user"
 
     class Config:
         schema_extra = {
@@ -23,7 +23,7 @@ class Admin(Document):
         }
 
 
-class AdminSignIn(HTTPBasicCredentials):
+class UserSignIn(HTTPBasicCredentials):
     class Config:
         schema_extra = {
             "example": {
@@ -33,7 +33,7 @@ class AdminSignIn(HTTPBasicCredentials):
         }
 
 
-class AdminData(BaseModel):
+class UserData(BaseModel):
     fullname: str
     email: EmailStr
 

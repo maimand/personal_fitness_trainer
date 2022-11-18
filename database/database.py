@@ -4,12 +4,18 @@ from beanie import PydanticObjectId
 
 from models.admin import Admin
 from models.student import Student
+from models.super_admin import AddAdminData
 
 admin_collection = Admin
 student_collection = Student
 
 
 async def add_admin(new_admin: Admin) -> Admin:
+    admin = await new_admin.create()
+    return admin
+
+
+async def add_admin_code(new_admin: AddAdminData) -> AddAdminData:
     admin = await new_admin.create()
     return admin
 
