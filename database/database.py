@@ -8,6 +8,7 @@ from models.super_admin import AddAdminData
 
 admin_collection = Admin
 student_collection = Student
+admins_collection = AddAdminData
 
 
 async def add_admin(new_admin: Admin) -> Admin:
@@ -18,6 +19,11 @@ async def add_admin(new_admin: Admin) -> Admin:
 async def add_admin_code(new_admin: AddAdminData) -> AddAdminData:
     admin = await new_admin.create()
     return admin
+
+
+async def retrieve_admin_code() -> List[AddAdminData]:
+    codes = await admins_collection.all().to_list()
+    return codes
 
 
 async def retrieve_students() -> List[Student]:

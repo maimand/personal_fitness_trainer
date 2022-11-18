@@ -2,7 +2,8 @@ from fastapi import Body, APIRouter, HTTPException
 from passlib.context import CryptContext
 
 from auth.jwt_handler import sign_jwt
-from database.database import add_admin, add_admin_code
+from database.database import *
+from models.student import Response
 from models.super_admin import SuperAdmin, SuperAdminSignIn, AddAdminData
 
 router = APIRouter()
@@ -31,7 +32,18 @@ async def super_admin_login(admin_credentials: SuperAdminSignIn = Body(...)):
 
 
 @router.post("/add-admin", response_model=AddAdminData)
-async def admin_signup(admin_name):
+async def super_admin_signup(admin_name):
     admin = AddAdminData(fullname=admin_name, code=hash_helper.encrypt(admin_name))
     new_admin = await add_admin_code(admin)
     return new_admin
+
+
+@router.post("/get-admin-codes", response_description="Admin data retrieved", response_model=Response)
+async def get_admins():
+    admins = await retrieve_admin_code()
+    return {
+        "status_code": 200,
+        "response_type": "success",
+        "description": "Students data retrieved successfully",
+        "data": admins
+    }

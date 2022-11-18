@@ -3,6 +3,7 @@ from passlib.context import CryptContext
 
 from auth.jwt_handler import sign_jwt
 from database.user import add_user
+from models.super_admin import AddAdminData
 from models.user import *
 
 router = APIRouter()
@@ -31,14 +32,20 @@ async def user_login(user_credentials: UserSignIn = Body(...)):
 
 
 @router.post("/new", response_model=UserData)
-async def admin_signup(user: User = Body(...)):
+async def user_signup(user: User = Body(...)):
     user_exists = await User.find_one(User.email == user.email)
     if user_exists:
         raise HTTPException(
             status_code=409,
             detail="User with email supplied already exists"
         )
+    code_valid = await AddAdminData.find_one(AddAdminData.code == user.code)
+    if code_valid:
+        user.password = hash_helper.encrypt(user.password)
+        new_admin = await add_user(user)
+        return new_admin
 
-    user.password = hash_helper.encrypt(user.password)
-    new_admin = await add_user(user)
-    return new_admin
+    raise HTTPException(
+        status_code=409,
+        detail="User with code supplied not existed"
+    )
