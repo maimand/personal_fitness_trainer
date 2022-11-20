@@ -1,6 +1,7 @@
 from beanie import Document
 from fastapi.security import HTTPBasicCredentials
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 
 class User(Document):
@@ -8,6 +9,11 @@ class User(Document):
     email: EmailStr
     password: str
     code: str
+    height: Optional[float]
+    weight: Optional[float]
+    fullname: Optional[str]
+    age: Optional[int]
+    gender: Optional[str]
 
     class Collection:
         name = "user"
@@ -19,6 +25,10 @@ class User(Document):
                 "email": "abdul@youngest.dev",
                 "password": "3xt3m#",
                 "code": "123456",
+                "height": "1.7",
+                "weight": "70.0",
+                "age": 23,
+                "gender": "male"
             }
         }
 
@@ -65,11 +75,39 @@ class UserData(BaseModel):
 class DetailUserData(BaseModel):
     fullname: str
     email: EmailStr
+    height: Optional[float]
+    weight: Optional[float]
+    fullname: Optional[str]
+    age: Optional[int]
+    gender: Optional[str]
 
     class Config:
         schema_extra = {
             "example": {
                 "fullname": "Abdulazeez Abdulazeez Adeshina",
                 "email": "abdul@youngest.dev",
+                "height": "1.7",
+                "weight": "70.0",
+                "age": 23,
+                "gender": "male"
+            }
+        }
+
+
+class UpdateUserModel(BaseModel):
+    height: Optional[float]
+    weight: Optional[float]
+    fullname: Optional[str]
+    age: Optional[int]
+    gender: Optional[str]
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "fullname": "Abdulazeez Abdulazeez",
+                "height": "1.7",
+                "weight": "70.0",
+                "age": 23,
+                "gender": "male"
             }
         }

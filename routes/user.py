@@ -3,7 +3,7 @@ from passlib.context import CryptContext
 
 from auth.jwt_handler import sign_jwt
 from auth.user import user_validate_token
-from database.user import add_user
+from database.user import add_user, update_user_data
 from models.super_admin import AddAdminData
 from models.user import *
 from auth.jwt_bearer import JWTBearer
@@ -56,3 +56,9 @@ async def user_signup(user: User = Body(...)):
 @router.get("/get-info", response_model=DetailUserData, response_description='Get current user info')
 async def get_user(user: User = Depends(user_validate_token)):
     return user
+
+
+@router.put("/update", response_model=DetailUserData, response_description='Update current user info')
+async def update_user(user: User = Depends(user_validate_token), req: UpdateUserModel = Body(...)):
+    updated_user = await update_user_data(user, req.dict())
+    return updated_user
