@@ -7,7 +7,7 @@ from pydantic import BaseSettings
 from models.admin import Admin
 from models.student import Student
 from models.super_admin import SuperAdmin, AddAdminData
-from models.user import User
+from models.user import User, UserToken
 
 
 class Settings(BaseSettings):
@@ -26,4 +26,4 @@ class Settings(BaseSettings):
 async def initiate_database():
     client = AsyncIOMotorClient(Settings().DATABASE_URL)
     await init_beanie(database=client['fitness'],
-                      document_models=[Admin, Student, SuperAdmin, AddAdminData, User])
+                      document_models=[Admin, Student, SuperAdmin, AddAdminData, User, UserToken])

@@ -1,13 +1,15 @@
-from fastapi import Body, APIRouter, HTTPException
+from fastapi import Body, APIRouter, HTTPException, Depends
 from passlib.context import CryptContext
 
 from auth.jwt_handler import sign_jwt
+from auth.user import user_validate_token
 from database.user import add_user
 from models.super_admin import AddAdminData
 from models.user import *
+from auth.jwt_bearer import JWTBearer
 
 router = APIRouter()
-
+token_listener = JWTBearer()
 hash_helper = CryptContext(schemes=["bcrypt"])
 
 
@@ -49,3 +51,8 @@ async def user_signup(user: User = Body(...)):
         status_code=409,
         detail="User with code supplied not existed"
     )
+
+
+@router.get("/get-info", response_model=DetailUserData, response_description='Get current user info')
+async def get_user(user: User = Depends(user_validate_token)):
+    return user

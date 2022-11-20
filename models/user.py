@@ -18,7 +18,23 @@ class User(Document):
                 "fullname": "Abdulazeez Abdulazeez Adeshina",
                 "email": "abdul@youngest.dev",
                 "password": "3xt3m#",
-                "code": "123456"
+                "code": "123456",
+            }
+        }
+
+
+class UserToken(Document):
+    userId: str
+    access_token: str
+
+    class Collection:
+        name = "user-token"
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "userId": "Abdulazeez Abdulazeez Adeshina",
+                "access_token": "123456abc"
             }
         }
 
@@ -34,6 +50,19 @@ class UserSignIn(HTTPBasicCredentials):
 
 
 class UserData(BaseModel):
+    fullname: str
+    email: EmailStr
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "fullname": "Abdulazeez Abdulazeez Adeshina",
+                "email": "abdul@youngest.dev",
+            }
+        }
+
+
+class DetailUserData(BaseModel):
     fullname: str
     email: EmailStr
 

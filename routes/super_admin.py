@@ -1,7 +1,8 @@
-from fastapi import Body, APIRouter, HTTPException
+from fastapi import Body, APIRouter, HTTPException, Depends
 from passlib.context import CryptContext
 
 from auth.jwt_handler import sign_jwt
+from auth.super_admin import super_admin_validate_token
 from database.database import *
 from models.student import Response
 from models.super_admin import SuperAdmin, SuperAdminSignIn, AddAdminData
@@ -31,14 +32,15 @@ async def super_admin_login(admin_credentials: SuperAdminSignIn = Body(...)):
     )
 
 
-@router.post("/add-admin", response_model=AddAdminData)
-async def super_admin_signup(admin_name):
+@router.post("/add-admin", response_model=AddAdminData, dependencies=[Depends(super_admin_validate_token)])
+async def add_admin(admin_name: str = Body(...)):
     admin = AddAdminData(fullname=admin_name, code=hash_helper.encrypt(admin_name))
     new_admin = await add_admin_code(admin)
     return new_admin
 
 
-@router.post("/get-admin-codes", response_description="Admin data retrieved", response_model=Response)
+@router.post("/get-admin-codes", response_description="Admin data retrieved", response_model=Response,
+             dependencies=[Depends(super_admin_validate_token)])
 async def get_admins():
     admins = await retrieve_admin_code()
     return {

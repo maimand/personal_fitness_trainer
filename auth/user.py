@@ -1,13 +1,16 @@
 from fastapi import HTTPException, Depends, status
+from fastapi.security import OAuth2PasswordBearer
 
 from auth.jwt_bearer import JWTBearer
 from auth.jwt_handler import decode_jwt
-from models.admin import Admin
+from models.user import User
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-async def admin_validate_token(jwtoken: str = Depends(JWTBearer())) -> Admin:
+async def user_validate_token(jwtoken: str = Depends(JWTBearer())) -> User:
     payload = decode_jwt(jwtoken)
-    user = await Admin.find_one({"email": payload["user_id"]})
+    user = await User.find_one({"email": payload["user_id"]})
     if user:
         return user
     raise HTTPException(

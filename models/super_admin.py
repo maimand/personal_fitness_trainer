@@ -1,6 +1,6 @@
 from beanie import Document
 from fastapi.security import HTTPBasicCredentials
-from pydantic import BaseModel, EmailStr
+from pydantic import EmailStr
 
 
 class SuperAdmin(Document):
@@ -23,8 +23,8 @@ class SuperAdminSignIn(HTTPBasicCredentials):
     class Config:
         schema_extra = {
             "example": {
-                "username": "abdul@youngest.dev",
-                "password": "3xt3m#"
+                "username": "superadmin@test.com",
+                "password": "123456"
             }
         }
 
