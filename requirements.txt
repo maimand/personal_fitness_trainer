@@ -7,5 +7,6 @@ fastapi~=0.78.0
 pymongo[srv]
 pydantic[email,dotenv]~=1.9.0
 passlib~=1.7.4
+requests
 
 beanie~=1.10.8

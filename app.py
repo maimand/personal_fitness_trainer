@@ -6,6 +6,7 @@ from routes.admin import router as AdminRouter
 from routes.student import router as StudentRouter
 from routes.super_admin import router as SuperAdminRouter
 from routes.user import router as UserRouter
+from routes.exercises import router as ExercisesRouter
 
 app = FastAPI()
 
@@ -25,4 +26,5 @@ async def read_root():
 app.include_router(AdminRouter, tags=["Administrator"], prefix="/admin")
 app.include_router(StudentRouter, tags=["Students"], prefix="/student", dependencies=[Depends(token_listener)])
 app.include_router(SuperAdminRouter, tags=["Super Admin"], prefix="/super-admin",)
-app.include_router(UserRouter, tags=["Users"], prefix="/user",)
+app.include_router(UserRouter, tags=["Users"], prefix="/user", )
+app.include_router(ExercisesRouter, tags=["Exercises"], prefix="/exercises", )
