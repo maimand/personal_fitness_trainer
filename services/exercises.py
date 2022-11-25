@@ -1,4 +1,5 @@
-from typing import List
+import asyncio
+from typing import List, Union
 
 import requests
 
@@ -74,3 +75,18 @@ async def get_exercise_detail_request(name) -> List[ExerciseDetail]:
         return list(res)
     else:
         return []
+
+
+async def get_exercise_detail(name) -> Union[bool, ExerciseDetail]:
+    a, b = await asyncio.gather(
+        get_exercises_by_name_request(name),
+        get_exercise_detail_request(name)
+    )
+    if a:
+        ex = a[0]
+        if b:
+            c = b[0]
+            c.name = ex.name
+            c.videoUrl = ex.videoUrl
+            return c
+    return False

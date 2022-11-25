@@ -1,3 +1,5 @@
+from datetime import datetime
+from beanie import Document
 from pydantic import BaseModel
 
 
@@ -29,5 +31,42 @@ class ExerciseDetail(BaseModel):
                 "difficulty": "intermediate",
                 "instructions": "Barbell Bench Press",
                 "caloriesBurn": 150.0
+            }
+        }
+
+
+class ExerciseLog(Document):
+    user: str
+    exerciseName: str
+    time: datetime = datetime.now()
+    reps: int
+    totalCaloriesBurn: int
+
+    class Collection:
+        name = "exercise-log"
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "user": "man@mai.com",
+                "exerciseName": "Push up",
+                "time": datetime.now(),
+                "reps": 10,
+                "totalCaloriesBurn": 1000
+            }
+        }
+
+
+class ExerciseLogBody(BaseModel):
+    exerciseName: str
+    reps: int
+    totalCaloriesBurn: int
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "exerciseName": "Push up",
+                "reps": 10,
+                "totalCaloriesBurn": 1000
             }
         }

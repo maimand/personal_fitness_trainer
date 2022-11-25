@@ -1,4 +1,3 @@
-import asyncio
 from fastapi import APIRouter
 from models.student import Response
 from services.exercises import *
@@ -48,15 +47,6 @@ async def get_exercise_detail(name: str):
         "description": "Exercise doesn't exist",
     }
 
-# @router.post("/", response_description="Student data added into the database", response_model=Response)
-# async def add_student_data(student: Student = Body(...)):
-#     new_student = await add_student(student)
-#     return {
-#         "status_code": 200,
-#         "response_type": "success",
-#         "description": "Student created successfully",
-#         "data": new_student
-#     }
 #
 #
 # @router.delete("/{id}", response_description="Student data deleted from the database")

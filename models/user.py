@@ -53,8 +53,8 @@ class UserSignIn(HTTPBasicCredentials):
     class Config:
         schema_extra = {
             "example": {
-                "username": "abdul@youngest.dev",
-                "password": "3xt3m#"
+                "username": "man@amai.com",
+                "password": "123456"
             }
         }
 

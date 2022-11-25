@@ -7,6 +7,7 @@ from routes.student import router as StudentRouter
 from routes.super_admin import router as SuperAdminRouter
 from routes.user import router as UserRouter
 from routes.exercises import router as ExercisesRouter
+from routes.logs import router as LogsRouter
 
 app = FastAPI()
 
@@ -28,3 +29,4 @@ app.include_router(StudentRouter, tags=["Students"], prefix="/student", dependen
 app.include_router(SuperAdminRouter, tags=["Super Admin"], prefix="/super-admin",)
 app.include_router(UserRouter, tags=["Users"], prefix="/user", )
 app.include_router(ExercisesRouter, tags=["Exercises"], prefix="/exercises", )
+app.include_router(LogsRouter, tags=["Logs"], prefix="/logs", )
