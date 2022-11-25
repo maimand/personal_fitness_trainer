@@ -1,43 +1,52 @@
+import asyncio
 from fastapi import APIRouter
-import requests
-from models.student import *
+from models.student import Response
+from services.exercises import *
 
 router = APIRouter()
 
-url = "https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises"
-
-headers = {
-    "X-RapidAPI-Key": "bbf11e7827msh68b8edc80e10e74p1b9755jsn257ce29150ec",
-    "X-RapidAPI-Host": "exercises-by-api-ninjas.p.rapidapi.com"
-}
-
 
 @router.get("/", response_description="Exercise retrieved", response_model=Response)
-async def get_exercises():
-    response = requests.request("GET", url, headers=headers)
+async def get_exercises(name: str = ''):
+    res = await get_exercises_by_body_part_request(name)
     return {
         "status_code": 200,
         "response_type": "success",
         "description": "Exercises data retrieved successfully",
-        "data": response.json()
+        "data": res
     }
 
-# @router.get("/{id}", response_description="Student data retrieved", response_model=Response)
-# async def get_student_data(id: PydanticObjectId):
-#     student = await retrieve_student(id)
-#     if student:
-#         return {
-#             "status_code": 200,
-#             "response_type": "success",
-#             "description": "Student data retrieved successfully",
-#             "data": student
-#         }
-#     return {
-#         "status_code": 404,
-#         "response_type": "error",
-#         "description": "Student doesn't exist",
-#     }
 
+@router.get("/{name}", response_description="Exercise detail data retrieved", response_model=Response)
+async def get_exercise_detail(name: str):
+    a, b = await asyncio.gather(
+        get_exercises_by_name_request(name),
+        get_exercise_detail_request(name)
+    )
+    if a:
+        ex = a[0]
+        if b:
+            c = b[0]
+            c.name = ex.name
+            c.videoUrl = ex.videoUrl
+            return {
+                "status_code": 200,
+                "response_type": "success",
+                "description": "Exercise detail return",
+                "data": c
+            }
+        else:
+            return {
+                "status_code": 200,
+                "response_type": "success",
+                "description": "Exercise detail return",
+                "data": ex
+            }
+    return {
+        "status_code": 404,
+        "response_type": "error",
+        "description": "Exercise doesn't exist",
+    }
 
 # @router.post("/", response_description="Student data added into the database", response_model=Response)
 # async def add_student_data(student: Student = Body(...)):
