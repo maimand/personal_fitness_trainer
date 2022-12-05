@@ -7,8 +7,8 @@ from models.exercise import ExerciseLog
 from models.user import User
 
 
-async def retrieve_exercise_log(user: User) -> List[ExerciseLog]:
-    logs = await ExerciseLog.find_many({"user": user.email}).to_list()
+async def retrieve_exercise_log(user: str) -> List[ExerciseLog]:
+    logs = await ExerciseLog.find_many({"user": user}).to_list()
     return logs
 
 
@@ -24,8 +24,8 @@ async def delete_exercise_log_from_db(id: PydanticObjectId) -> bool:
         return True
 
 
-async def retrieve_food_log(user: User) -> List[FoodLog]:
-    logs = await FoodLog.find_many({"user": user.email}).to_list()
+async def retrieve_food_log(user: str) -> List[FoodLog]:
+    logs = await FoodLog.find_many({"user": user}).to_list()
     return logs
 
 

@@ -14,10 +14,10 @@ from models.user import User, UserToken
 
 class Settings(BaseSettings):
     # database configurations
-    DATABASE_URL: Optional[str] = None
+    DATABASE_URL: Optional[str] = "mongodb+srv://manmai:01694429810@cluster0.5bl5csu.mongodb.net/?retryWrites=true&w=majority"
 
     # JWT
-    secret_key: str
+    secret_key: str = "guiyfgc837tgf3iw87-012389764"
     algorithm: str = "HS256"
 
     class Config:

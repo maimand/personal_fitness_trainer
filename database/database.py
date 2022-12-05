@@ -5,6 +5,7 @@ from beanie import PydanticObjectId
 from models.admin import Admin
 from models.student import Student
 from models.super_admin import AddAdminData
+from models.user import User
 
 admin_collection = Admin
 student_collection = Student
@@ -24,6 +25,20 @@ async def add_admin_code(new_admin: AddAdminData) -> AddAdminData:
 async def retrieve_admin_code() -> List[AddAdminData]:
     codes = await admins_collection.all().to_list()
     return codes
+
+
+async def delete_admin(id: PydanticObjectId) -> bool:
+    admin = await admins_collection.get(id)
+    if admin:
+        await admin.delete()
+        return True
+
+
+async def delete_user(id: PydanticObjectId) -> bool:
+    user = await User.get(id)
+    if user:
+        await user.delete()
+        return True
 
 
 async def retrieve_students() -> List[Student]:

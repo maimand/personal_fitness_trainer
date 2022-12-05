@@ -11,6 +11,7 @@ class User(Document):
     code: str
     height: Optional[float]
     weight: Optional[float]
+    fatPercent: Optional[float]
     fullname: Optional[str]
     age: Optional[int]
     gender: Optional[str]
@@ -25,8 +26,9 @@ class User(Document):
                 "email": "abdul@youngest.dev",
                 "password": "3xt3m#",
                 "code": "123456",
-                "height": "1.7",
-                "weight": "70.0",
+                "height": 1.7,
+                "weight": 70.0,
+                "fatPercent": 20.0,
                 "age": 23,
                 "gender": "male"
             }
@@ -77,6 +79,7 @@ class DetailUserData(BaseModel):
     email: EmailStr
     height: Optional[float]
     weight: Optional[float]
+    fatPercent: Optional[float]
     fullname: Optional[str]
     age: Optional[int]
     gender: Optional[str]
@@ -86,8 +89,9 @@ class DetailUserData(BaseModel):
             "example": {
                 "fullname": "Abdulazeez Abdulazeez Adeshina",
                 "email": "abdul@youngest.dev",
-                "height": "1.7",
-                "weight": "70.0",
+                "height": 1.7,
+                "weight": 70.0,
+                "fatPercent": 70.0,
                 "age": 23,
                 "gender": "male"
             }
@@ -97,6 +101,7 @@ class DetailUserData(BaseModel):
 class UpdateUserModel(BaseModel):
     height: Optional[float]
     weight: Optional[float]
+    fatPercent: Optional[float]
     fullname: Optional[str]
     age: Optional[int]
     gender: Optional[str]
@@ -105,8 +110,9 @@ class UpdateUserModel(BaseModel):
         schema_extra = {
             "example": {
                 "fullname": "Abdulazeez Abdulazeez",
-                "height": "1.7",
-                "weight": "70.0",
+                "height": 1.7,
+                "weight": 70.0,
+                "fatPercent": 70.0,
                 "age": 23,
                 "gender": "male"
             }

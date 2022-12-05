@@ -13,7 +13,7 @@ router = APIRouter()
 
 @router.get("/exercises-logs", response_description="Exercise logs retrieved", response_model=Response)
 async def get_exercises_logs(user: User = Depends(user_validate_token)):
-    logs = await retrieve_exercise_log(user)
+    logs = await retrieve_exercise_log(user.email)
     return {
         "status_code": 200,
         "response_type": "success",
@@ -24,7 +24,7 @@ async def get_exercises_logs(user: User = Depends(user_validate_token)):
 
 @router.get("/food-logs", response_description="Food logs retrieved", response_model=Response)
 async def get_food_logs(user: User = Depends(user_validate_token)):
-    logs = await retrieve_food_log(user)
+    logs = await retrieve_food_log(user.email)
     return {
         "status_code": 200,
         "response_type": "success",

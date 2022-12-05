@@ -3,7 +3,7 @@ PyJWT~=2.4.0
 bcrypt
 uvicorn~=0.17.6
 pymongo~=3.12.3
-fastapi~=0.78.0
+fastapi~=0.80.0
 pymongo[srv]
 pydantic[email,dotenv]~=1.9.0
 passlib~=1.7.4
@@ -12,3 +12,5 @@ pandas
 fastapi-pagination
 
 beanie~=1.10.8
+deta
+python-multipart

@@ -14,22 +14,25 @@ hash_helper = CryptContext(schemes=["bcrypt"])
 
 @router.post("/login")
 async def super_admin_login(admin_credentials: SuperAdminSignIn = Body(...)):
-    admin_exists = await SuperAdmin.find_one(SuperAdmin.email == admin_credentials.username)
-    if admin_exists:
-        # login for super admin is temp
-        password = admin_credentials.password == admin_exists.password
-        if password:
-            return sign_jwt(admin_credentials.username)
+    try:
+        admin_exists = await SuperAdmin.find_one(SuperAdmin.email == admin_credentials.username)
+        if admin_exists:
+            # login for super admin is temp
+            password = admin_credentials.password == admin_exists.password
+            if password:
+                return sign_jwt(admin_credentials.username)
+
+            raise HTTPException(
+                status_code=403,
+                detail="Incorrect email or password"
+            )
 
         raise HTTPException(
             status_code=403,
             detail="Incorrect email or password"
         )
-
-    raise HTTPException(
-        status_code=403,
-        detail="Incorrect email or password"
-    )
+    except Exception as e:
+        return {'error': str(e)}
 
 
 @router.post("/add-admin", response_model=AddAdminData, dependencies=[Depends(super_admin_validate_token)])
@@ -39,8 +42,27 @@ async def add_admin(admin_name: str = Body(...)):
     return new_admin
 
 
-@router.post("/get-admin-codes", response_description="Admin data retrieved", response_model=Response,
-             dependencies=[Depends(super_admin_validate_token)])
+@router.delete("/delete/{id}", response_description="Admin deleted from the database"
+    , dependencies=[Depends(super_admin_validate_token)])
+async def delete_admin(id: PydanticObjectId):
+    deleted_log = await delete_admin(id)
+    if deleted_log:
+        return {
+            "status_code": 200,
+            "response_type": "success",
+            "description": "Admin with ID: {} removed".format(id),
+            "data": deleted_log
+        }
+    return {
+        "status_code": 404,
+        "response_type": "error",
+        "description": "Log with id {0} doesn't exist".format(id),
+        "data": False
+    }
+
+
+@router.get("/get-admin-codes", response_description="Admin data retrieved", response_model=Response,
+            dependencies=[Depends(super_admin_validate_token)])
 async def get_admins():
     admins = await retrieve_admin_code()
     return {

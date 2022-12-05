@@ -10,6 +10,7 @@ from routes.user import router as UserRouter
 from routes.exercises import router as ExercisesRouter
 from routes.logs import router as LogsRouter
 from routes.diet import router as DietRouter
+from routes.upload import router as UploadRouter
 
 app = FastAPI()
 
@@ -34,3 +35,4 @@ app.include_router(UserRouter, tags=["Users"], prefix="/user", )
 app.include_router(ExercisesRouter, tags=["Exercises"], prefix="/exercises", )
 app.include_router(DietRouter, tags=["Diet"], prefix="/diet", )
 app.include_router(LogsRouter, tags=["Logs"], prefix="/logs", )
+app.include_router(UploadRouter, tags=["Upload"], prefix="/upload", )
