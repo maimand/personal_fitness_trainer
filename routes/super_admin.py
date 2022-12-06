@@ -61,7 +61,7 @@ async def delete_admin(id: PydanticObjectId):
     }
 
 
-@router.get("/get-admin-codes", response_description="Admin data retrieved", response_model=Response,
+@router.get("/get-admins", response_description="Admin data retrieved", response_model=Response,
             dependencies=[Depends(super_admin_validate_token)])
 async def get_admins():
     admins = await retrieve_admin_code()

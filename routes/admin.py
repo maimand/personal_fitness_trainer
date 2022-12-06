@@ -6,11 +6,13 @@ from passlib.context import CryptContext
 
 from auth.admin import admin_validate_token
 from auth.jwt_handler import sign_jwt
-from database.database import add_admin, delete_user
+from database.database import add_admin, delete_user, retrieve_users
 from database.logs import retrieve_exercise_log, retrieve_food_log
 from models.admin import Admin, AdminData, AdminSignIn
 from models.diet import FoodLog
 from models.exercise import ExerciseLog
+from models.student import Response
+from models.user import User
 
 router = APIRouter()
 
@@ -51,8 +53,8 @@ async def admin_signup(admin: Admin = Body(...)):
     return new_admin
 
 
-@router.delete("/delete/{id}", response_description="User deleted from the database"
-                ,dependencies=[Depends(admin_validate_token)])
+@router.delete("/delete/{id}", response_description="User deleted from the database",
+               dependencies=[Depends(admin_validate_token)])
 async def delete_user(id: PydanticObjectId):
     deleted_log = await delete_user(id)
     if deleted_log:
@@ -70,7 +72,8 @@ async def delete_user(id: PydanticObjectId):
     }
 
 
-@router.get("/exercises-logs/{email}", response_description="Exercise logs retrieved", response_model=List[ExerciseLog])
+@router.get("/exercises-logs/{email}", response_description="Exercise logs retrieved", response_model=Response,
+            dependencies=[Depends(admin_validate_token)])
 async def get_exercises_logs(email: str):
     logs = await retrieve_exercise_log(email)
     return {
@@ -81,7 +84,8 @@ async def get_exercises_logs(email: str):
     }
 
 
-@router.get("/food-logs/{email}", response_description="Food logs retrieved", response_model=List[FoodLog])
+@router.get("/food-logs/{email}", response_description="Food logs retrieved", response_model=Response,
+            dependencies=[Depends(admin_validate_token)])
 async def get_food_logs(email: str):
     logs = await retrieve_food_log(email)
     return {
@@ -89,4 +93,15 @@ async def get_food_logs(email: str):
         "response_type": "success",
         "description": "Students data retrieved successfully",
         "data": logs
+    }
+
+
+@router.get("/get-users", response_description="Users data retrieved", response_model=Response)
+async def get_users(admin: Admin = Depends(admin_validate_token)):
+    admins = await retrieve_users(admin)
+    return {
+        "status_code": 200,
+        "response_type": "success",
+        "description": "Students data retrieved successfully",
+        "data": admins
     }

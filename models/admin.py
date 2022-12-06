@@ -27,8 +27,8 @@ class AdminSignIn(HTTPBasicCredentials):
     class Config:
         schema_extra = {
             "example": {
-                "username": "abdul@youngest.dev",
-                "password": "3xt3m#"
+                "username": "danang@cali.com",
+                "password": "123456"
             }
         }
 
