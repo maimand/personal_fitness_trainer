@@ -107,5 +107,5 @@ async def get_code(admin: Admin = Depends(admin_validate_token)):
         "status_code": 200,
         "response_type": "success",
         "description": "Code data retrieved successfully",
-        "data": admin.code
+        "data": admin
     }
