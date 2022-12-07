@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi_pagination import add_pagination
+from fastapi.middleware.cors import CORSMiddleware
 
 from auth.jwt_bearer import JWTBearer
 from config.config import initiate_database
@@ -15,6 +16,17 @@ app = FastAPI()
 token_listener = JWTBearer()
 
 add_pagination(app)
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.on_event("startup")
 async def start_database():
