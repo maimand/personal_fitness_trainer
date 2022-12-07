@@ -45,7 +45,7 @@ async def add_admin(admin_name: str = Body(...)):
 @router.delete("/delete/{id}", response_description="Admin deleted from the database"
     , dependencies=[Depends(super_admin_validate_token)])
 async def delete_admin(id: PydanticObjectId):
-    deleted_log = await delete_admin(id)
+    deleted_log = await delete_admin_data(id)
     if deleted_log:
         return {
             "status_code": 200,

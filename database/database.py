@@ -37,15 +37,15 @@ async def retrieve_users(admin: Admin) -> List[User]:
     return users
 
 
-async def delete_admin(id: PydanticObjectId) -> bool:
+async def delete_admin_data(id: PydanticObjectId) -> bool:
     admin = await admins_collection.get(id)
     if admin:
         await admin.delete()
         return True
 
 
-async def delete_user(id: PydanticObjectId) -> bool:
-    user = await User.get(id)
+async def delete_user_data(email: str) -> bool:
+    user = await User.find_one({"email": email})
     if user:
         await user.delete()
         return True

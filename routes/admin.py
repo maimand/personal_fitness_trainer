@@ -1,18 +1,12 @@
-from typing import List
-
-from beanie import PydanticObjectId
 from fastapi import Body, APIRouter, HTTPException, Depends
 from passlib.context import CryptContext
 
 from auth.admin import admin_validate_token
 from auth.jwt_handler import sign_jwt
-from database.database import add_admin, delete_user, retrieve_users
+from database.database import add_admin, retrieve_users, delete_user_data
 from database.logs import retrieve_exercise_log, retrieve_food_log
 from models.admin import Admin, AdminData, AdminSignIn
-from models.diet import FoodLog
-from models.exercise import ExerciseLog
 from models.student import Response
-from models.user import User
 
 router = APIRouter()
 
@@ -53,10 +47,10 @@ async def admin_signup(admin: Admin = Body(...)):
     return new_admin
 
 
-@router.delete("/delete/{id}", response_description="User deleted from the database",
+@router.delete("/delete/{email}", response_description="User deleted from the database",
                dependencies=[Depends(admin_validate_token)])
-async def delete_user(id: PydanticObjectId):
-    deleted_log = await delete_user(id)
+async def delete_user(email: str):
+    deleted_log = await delete_user_data(email)
     if deleted_log:
         return {
             "status_code": 200,
