@@ -105,3 +105,13 @@ async def get_users(admin: Admin = Depends(admin_validate_token)):
         "description": "Students data retrieved successfully",
         "data": admins
     }
+
+
+@router.get("/get-code", response_description="Code data retrieved", response_model=Response)
+async def get_users(admin: Admin = Depends(admin_validate_token)):
+    return {
+        "status_code": 200,
+        "response_type": "success",
+        "description": "Code data retrieved successfully",
+        "data": admin.code
+    }
