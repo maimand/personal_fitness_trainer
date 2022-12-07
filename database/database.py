@@ -27,6 +27,11 @@ async def retrieve_admin_code() -> List[AddAdminData]:
     return codes
 
 
+async def retrieve_admins() -> List[Admin]:
+    admins = await Admin.all().to_list()
+    return admins
+
+
 async def retrieve_users(admin: Admin) -> List[User]:
     users = await User.find_many({"code": admin.code}).to_list()
     return users
