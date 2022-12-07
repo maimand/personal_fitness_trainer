@@ -108,7 +108,7 @@ async def get_users(admin: Admin = Depends(admin_validate_token)):
 
 
 @router.get("/get-code", response_description="Code data retrieved", response_model=Response)
-async def get_users(admin: Admin = Depends(admin_validate_token)):
+async def get_code(admin: Admin = Depends(admin_validate_token)):
     return {
         "status_code": 200,
         "response_type": "success",
