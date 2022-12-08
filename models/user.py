@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from beanie import Document
 from fastapi.security import HTTPBasicCredentials
 from pydantic import BaseModel, EmailStr
@@ -31,22 +33,6 @@ class User(Document):
                 "fatPercent": 20.0,
                 "age": 23,
                 "gender": "male"
-            }
-        }
-
-
-class UserToken(Document):
-    userId: str
-    access_token: str
-
-    class Collection:
-        name = "user-token"
-
-    class Config:
-        schema_extra = {
-            "example": {
-                "userId": "Abdulazeez Abdulazeez Adeshina",
-                "access_token": "123456abc"
             }
         }
 
@@ -115,5 +101,35 @@ class UpdateUserModel(BaseModel):
                 "fatPercent": 70.0,
                 "age": 23,
                 "gender": "male"
+            }
+        }
+
+
+class UserLog(Document):
+    user: str
+    image: str
+    time: datetime = datetime.now()
+
+    class Collection:
+        name = "user-log"
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "user": "man@mai.com",
+                "image": "",
+                "time": datetime.now(),
+            }
+        }
+
+
+class UserLogBody(BaseModel):
+    image: str
+    time: datetime = datetime.now()
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "image": "",
             }
         }

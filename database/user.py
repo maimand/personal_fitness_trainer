@@ -1,6 +1,6 @@
 from typing import Union
 
-from models.user import User, UserToken
+from models.user import User, UserLog
 
 user_collection = User
 
@@ -10,8 +10,8 @@ async def add_user(new_user: User) -> User:
     return user
 
 
-async def add_user_token(new_user: UserToken) -> UserToken:
-    user = await new_user.create()
+async def add_user_log(user_log: UserLog) -> UserLog:
+    user = await user_log.create()
     return user
 
 

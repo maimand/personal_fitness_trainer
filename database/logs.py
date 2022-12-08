@@ -4,7 +4,7 @@ from beanie import PydanticObjectId
 
 from models.diet import FoodLog
 from models.exercise import ExerciseLog
-from models.user import User
+from models.user import User, UserLog
 
 
 async def retrieve_exercise_log(user: str) -> List[ExerciseLog]:
@@ -26,6 +26,11 @@ async def delete_exercise_log_from_db(id: PydanticObjectId) -> bool:
 
 async def retrieve_food_log(user: str) -> List[FoodLog]:
     logs = await FoodLog.find_many({"user": user}).to_list()
+    return logs
+
+
+async def retrieve_user_log(user: str) -> List[UserLog]:
+    logs = await UserLog.find_many({"user": user}).to_list()
     return logs
 
 

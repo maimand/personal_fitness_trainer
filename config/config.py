@@ -9,7 +9,7 @@ from models.diet import FoodLog
 from models.exercise import ExerciseLog
 from models.student import Student
 from models.super_admin import SuperAdmin, AddAdminData
-from models.user import User, UserToken
+from models.user import User, UserLog
 
 
 class Settings(BaseSettings):
@@ -28,4 +28,4 @@ class Settings(BaseSettings):
 async def initiate_database():
     client = AsyncIOMotorClient(Settings().DATABASE_URL)
     await init_beanie(database=client['fitness'],
-                      document_models=[Admin, Student, SuperAdmin, AddAdminData, User, UserToken, ExerciseLog, FoodLog])
+                      document_models=[Admin, Student, SuperAdmin, AddAdminData, User, ExerciseLog, FoodLog, UserLog])
