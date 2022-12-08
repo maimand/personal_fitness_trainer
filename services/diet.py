@@ -32,7 +32,7 @@ def map_list_to_food(input_list) -> Food:
 
 
 def get_all_food_data(food) -> List[Food]:
-    df = pd.read_csv('/Users/pcomssb/PycharmProjects/personal_fitness_trainer/services/normalized_data.csv')
+    df = pd.read_csv('services/normalized_data.csv')
     if food:
         foods = df.loc[df['Normalized'].str.contains(food)].values.tolist()
     else:
