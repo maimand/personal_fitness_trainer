@@ -35,8 +35,8 @@ async def super_admin_login(admin_credentials: SuperAdminSignIn = Body(...)):
         return {'error': str(e)}
 
 
-@router.post("/add-admin", response_model=AddAdminData, dependencies=[Depends(super_admin_validate_token)])
-async def add_admin(admin_name: str = Body(...)):
+@router.post("/add-admin/{admin_name}", response_model=AddAdminData, dependencies=[Depends(super_admin_validate_token)])
+async def add_admin(admin_name: str):
     admin = AddAdminData(fullname=admin_name, code=hash_helper.encrypt(admin_name))
     new_admin = await add_admin_code(admin)
     return new_admin
