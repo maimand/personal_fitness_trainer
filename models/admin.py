@@ -1,3 +1,5 @@
+from typing import Optional
+
 from beanie import Document
 from fastapi.security import HTTPBasicCredentials
 from pydantic import BaseModel, EmailStr
@@ -8,6 +10,7 @@ class Admin(Document):
     email: EmailStr
     password: str
     code: str
+    center: Optional[str]
 
     class Collection:
         name = "admin"
@@ -18,6 +21,7 @@ class Admin(Document):
                 "fullname": "Abdulazeez Abdulazeez Adeshina",
                 "email": "abdul@youngest.dev",
                 "password": "3xt3m#",
+                "center": "cali",
                 "code": "123456"
             }
         }

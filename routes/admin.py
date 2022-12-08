@@ -7,6 +7,7 @@ from database.database import add_admin, retrieve_users, delete_user_data
 from database.logs import retrieve_exercise_log, retrieve_food_log
 from models.admin import Admin, AdminData, AdminSignIn
 from models.student import Response
+from models.super_admin import AddAdminData
 
 router = APIRouter()
 
@@ -41,10 +42,16 @@ async def admin_signup(admin: Admin = Body(...)):
             status_code=409,
             detail="Admin with email supplied already exists"
         )
-
-    admin.password = hash_helper.encrypt(admin.password)
-    new_admin = await add_admin(admin)
-    return new_admin
+    code_valid = await AddAdminData.find_one(AddAdminData.code == admin.code)
+    if code_valid:
+        admin.password = hash_helper.encrypt(admin.password)
+        admin.center = code_valid.fullname
+        new_admin = await add_admin(admin)
+        return new_admin
+    raise HTTPException(
+        status_code=409,
+        detail="Code supplied not exist"
+    )
 
 
 @router.delete("/delete/{email}", response_description="User deleted from the database",

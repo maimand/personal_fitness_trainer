@@ -37,6 +37,12 @@ async def super_admin_login(admin_credentials: SuperAdminSignIn = Body(...)):
 
 @router.post("/add-admin/{admin_name}", response_model=AddAdminData, dependencies=[Depends(super_admin_validate_token)])
 async def add_admin(admin_name: str):
+    name_existed = await AddAdminData.find_one(AddAdminData.fullname == admin_name)
+    if name_existed:
+        raise HTTPException(
+            status_code=404,
+            detail="Name is already existed"
+        )
     admin = AddAdminData(fullname=admin_name, code=hash_helper.encrypt(admin_name))
     new_admin = await add_admin_code(admin)
     return new_admin
