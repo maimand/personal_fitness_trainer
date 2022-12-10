@@ -16,6 +16,7 @@ def get_food_data(food) -> Food:
             fat=selected_row.values[0][4],
             carb=selected_row.values[0][5],
             fiber=selected_row.values[0][6],
+            image=selected_row.values[0][8],
         )
 
 
@@ -28,6 +29,7 @@ def map_list_to_food(input_list) -> Food:
         fat=input_list[4],
         carb=input_list[5],
         fiber=input_list[6],
+        image=input_list[8],
     )
 
 

@@ -7,6 +7,7 @@ class Food(BaseModel):
     id: str
     name: str
     ration: str
+    image: str
     calo: float
     protein: float
     fat: float
@@ -23,7 +24,8 @@ class Food(BaseModel):
                 "protein": 4.6,
                 "fat": 0.6,
                 "carb": 44.2,
-                "fiber": 0.23
+                "fiber": 0.23,
+                "image": 'image',
             }
         }
 
