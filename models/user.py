@@ -105,6 +105,19 @@ class UpdateUserModel(BaseModel):
         }
 
 
+class UpdateUserPasswordModel(BaseModel):
+    oldPassword: Optional[str]
+    newPassword: Optional[str]
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "oldPassword": "Abdulazeez Abdulazeez",
+                "newPassword": "male"
+            }
+        }
+
+
 class UserLog(Document):
     user: str
     image: str

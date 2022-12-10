@@ -22,3 +22,16 @@ async def update_user_data(user: User, data: dict) -> Union[bool, User]:
     }}
     await user.update(update_query)
     return user
+
+
+async def update_user_data_with_email(email: str, data: dict) -> Union[bool, User]:
+    user = await User.find_one({"email": email})
+    if user:
+        des_body = {k: v for k, v in data.items() if v is not None}
+        update_query = {"$set": {
+            field: value for field, value in des_body.items()
+        }}
+        await user.update(update_query)
+        return user
+    return False
+

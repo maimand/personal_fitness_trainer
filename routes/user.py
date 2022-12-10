@@ -62,3 +62,18 @@ async def get_user(user: User = Depends(user_validate_token)):
 async def update_user(user: User = Depends(user_validate_token), req: UpdateUserModel = Body(...)):
     updated_user = await update_user_data(user, req.dict())
     return updated_user
+
+
+@router.put("/reset-password", response_model=DetailUserData, response_description='Update password user info')
+async def update_user(user: User = Depends(user_validate_token), req: UpdateUserPasswordModel = Body(...)):
+    password = hash_helper.verify(
+         req.oldPassword, user.password)
+    if password:
+        new_password = hash_helper.encrypt(req.newPassword)
+        updated_user = await update_user_data(user, {'password': new_password})
+        return updated_user
+
+    raise HTTPException(
+        status_code=403,
+        detail="Incorrect password"
+    )

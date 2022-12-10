@@ -5,6 +5,7 @@ from auth.admin import admin_validate_token
 from auth.jwt_handler import sign_jwt
 from database.database import add_admin, retrieve_users, delete_user_data
 from database.logs import retrieve_exercise_log, retrieve_food_log
+from database.user import update_user_data, update_user_data_with_email
 from models.admin import Admin, AdminData, AdminSignIn
 from models.student import Response
 from models.super_admin import AddAdminData
@@ -115,4 +116,16 @@ async def get_code(admin: Admin = Depends(admin_validate_token)):
         "response_type": "success",
         "description": "Code data retrieved successfully",
         "data": admin
+    }
+
+
+@router.get("/reset-password/{email}", response_description="Code data retrieved", response_model=Response,
+            dependencies=[Depends(admin_validate_token)])
+async def reset_password(email: str):
+    res = await update_user_data_with_email(email, {'password':  hash_helper.encrypt('000000')})
+    return {
+        "status_code": 200,
+        "response_type": "success",
+        "description": "Code data retrieved successfully",
+        "data": res
     }
