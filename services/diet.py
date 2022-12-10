@@ -4,7 +4,7 @@ from models.diet import Food
 
 
 def get_food_data(food) -> Food:
-    df = pd.read_csv('/Users/pcomssb/PycharmProjects/personal_fitness_trainer/services/normalized_data.csv')
+    df = pd.read_csv('services/normalized_data.csv')
     selected_row = df.loc[df['Normalized'].str.contains(food)]
     if not selected_row.empty:
         return Food(
