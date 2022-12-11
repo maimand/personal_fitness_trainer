@@ -41,16 +41,9 @@ async def user_signup(user: User = Body(...)):
             status_code=409,
             detail="User with email supplied already exists"
         )
-    code_valid = await AddAdminData.find_one(AddAdminData.code == user.code)
-    if code_valid:
-        user.password = hash_helper.encrypt(user.password)
-        new_admin = await add_user(user)
-        return new_admin
-
-    raise HTTPException(
-        status_code=409,
-        detail="User with code supplied not existed"
-    )
+    user.password = hash_helper.encrypt(user.password)
+    new_admin = await add_user(user)
+    return new_admin
 
 
 @router.get("/get-info", response_model=DetailUserData, response_description='Get current user info')

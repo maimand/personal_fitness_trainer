@@ -10,7 +10,7 @@ class User(Document):
     fullname: str
     email: EmailStr
     password: str
-    code: str
+    code: Optional[float]
     height: Optional[float]
     weight: Optional[float]
     fatPercent: Optional[float]
