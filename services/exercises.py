@@ -28,16 +28,14 @@ def map_exercise(res):
 
 
 def map_exercise_detail(res):
-    calories_burn = 100
+    calories_burn = 10
     name = ''
     difficulty = res['difficulty']
     instructions = res['instructions']
-    if difficulty == 'beginner':
-        calories_burn = 100
     if difficulty == 'intermediate':
-        calories_burn = 150
+        calories_burn = 15
     if difficulty == 'expert':
-        calories_burn = 200
+        calories_burn = 20
     video_url = ''
     exercise = ExerciseDetail(name=name, videoUrl=video_url,
                               difficulty=difficulty, instructions=instructions, caloriesBurn=calories_burn)
