@@ -17,6 +17,7 @@ class User(Document):
     fullname: Optional[str]
     age: Optional[int]
     gender: Optional[str]
+    active: bool = False
 
     class Collection:
         name = "user"

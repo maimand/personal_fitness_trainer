@@ -1,3 +1,5 @@
+from typing import Optional
+
 from beanie import Document
 from fastapi.security import HTTPBasicCredentials
 from pydantic import EmailStr
@@ -32,6 +34,11 @@ class SuperAdminSignIn(HTTPBasicCredentials):
 class AddAdminData(Document):
     fullname: str
     code: str
+    email: Optional[str]
+    phone: Optional[str]
+    image: Optional[str]
+    description: Optional[str]
+    website: Optional[str]
 
     class Collection:
         name = "admin-code"
@@ -40,6 +47,10 @@ class AddAdminData(Document):
         schema_extra = {
             "example": {
                 "fullname": "Abdulazeez Abdulazeez Adeshina",
-                "code": "123456",
+                "email": "123456",
+                "phone": "123456",
+                "image": "123456",
+                "description": "123456",
+                "website": "123456",
             }
         }

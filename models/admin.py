@@ -11,6 +11,7 @@ class Admin(Document):
     password: str
     code: str
     center: Optional[str]
+    active: bool = False
 
     class Collection:
         name = "admin"

@@ -51,6 +51,12 @@ async def get_user(user: User = Depends(user_validate_token)):
     return user
 
 
+@router.get("/get-center-info", response_model=AddAdminData, response_description='Get current center info')
+async def get_center(user: User = Depends(user_validate_token)):
+    center = await AddAdminData.find_one({"code": user.code})
+    return center
+
+
 @router.put("/update", response_model=DetailUserData, response_description='Update current user info')
 async def update_user(user: User = Depends(user_validate_token), req: UpdateUserModel = Body(...)):
     updated_user = await update_user_data(user, req.dict())
