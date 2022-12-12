@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from beanie import Document
 from pydantic import BaseModel
 
@@ -38,7 +38,7 @@ class ExerciseDetail(BaseModel):
 class ExerciseLog(Document):
     user: str
     exerciseName: str
-    time: datetime = datetime.now()
+    time: datetime = datetime.now(timezone.utc)
     reps: int
     totalCaloriesBurn: int
 

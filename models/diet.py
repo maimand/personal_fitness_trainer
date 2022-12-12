@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from beanie import Document
 from pydantic import BaseModel
 
@@ -34,7 +34,7 @@ class FoodLog(Document):
     user: str
     foodId: str
     foodName: str
-    time: datetime = datetime.now()
+    time: datetime = datetime.now(timezone.utc)
     number: int
     totalCaloriesIntake: int
 

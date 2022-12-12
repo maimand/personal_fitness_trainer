@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from beanie import Document
 from fastapi.security import HTTPBasicCredentials
@@ -121,7 +121,7 @@ class UpdateUserPasswordModel(BaseModel):
 class UserLog(Document):
     user: str
     image: str
-    time: datetime = datetime.now()
+    time: datetime = datetime.now(timezone.utc)
 
     class Collection:
         name = "user-log"

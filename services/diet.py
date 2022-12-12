@@ -1,11 +1,12 @@
 from typing import List
 import pandas as pd
 from models.diet import Food
+from difflib import SequenceMatcher
 
 
 def get_food_data(food) -> Food:
     df = pd.read_csv('services/normalized_data.csv')
-    selected_row = df.loc[df['Normalized'].str.contains(food)]
+    selected_row = df.loc[SequenceMatcher(None, df['Normalized'].str, food).ratio() > 0.5]
     if not selected_row.empty:
         return Food(
             id=food,

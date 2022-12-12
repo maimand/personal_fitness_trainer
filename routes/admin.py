@@ -2,7 +2,7 @@ from fastapi import Body, APIRouter, HTTPException, Depends
 from passlib.context import CryptContext
 
 from auth.admin import admin_validate_token
-from auth.jwt_handler import sign_jwt
+from auth.jwt_handler import sign_jwt, admin_sign_jwt
 from database.database import add_admin, retrieve_users, delete_user_data
 from database.logs import retrieve_exercise_log, retrieve_food_log
 from database.user import update_user_data, update_user_data_with_email
@@ -22,7 +22,7 @@ async def admin_login(admin_credentials: AdminSignIn = Body(...)):
         password = hash_helper.verify(
             admin_credentials.password, admin_exists.password)
         if password:
-            return sign_jwt(admin_credentials.username)
+            return admin_sign_jwt(admin_credentials.username)
 
         raise HTTPException(
             status_code=403,

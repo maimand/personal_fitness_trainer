@@ -1,7 +1,7 @@
 from fastapi import Body, APIRouter, HTTPException, Depends
 from passlib.context import CryptContext
 
-from auth.jwt_handler import sign_jwt
+from auth.jwt_handler import sign_jwt, admin_sign_jwt
 from auth.super_admin import super_admin_validate_token
 from database.database import *
 from models.student import Response
@@ -20,7 +20,7 @@ async def super_admin_login(admin_credentials: SuperAdminSignIn = Body(...)):
             # login for super admin is temp
             password = admin_credentials.password == admin_exists.password
             if password:
-                return sign_jwt(admin_credentials.username)
+                return admin_sign_jwt(admin_credentials.username)
 
             raise HTTPException(
                 status_code=403,

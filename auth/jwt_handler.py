@@ -19,7 +19,16 @@ def sign_jwt(user_id: str) -> Dict[str, str]:
     # Set the expiry time.
     payload = {
         'user_id': user_id,
-        'expires': time.time() + 2400
+        'expires': time.time() + 259200
+    }
+    return token_response(jwt.encode(payload, secret_key, algorithm="HS256"))
+
+
+def admin_sign_jwt(user_id: str) -> Dict[str, str]:
+    # Set the expiry time.
+    payload = {
+        'user_id': user_id,
+        'expires': time.time() + 1800
     }
     return token_response(jwt.encode(payload, secret_key, algorithm="HS256"))
 
