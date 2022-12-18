@@ -16,4 +16,4 @@ deta
 python-multipart
 fastapi_mail
 
-starlette~=0.21.0
+starlette
