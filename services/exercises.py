@@ -1,4 +1,5 @@
 import asyncio
+import random
 from typing import List, Union
 
 import requests
@@ -43,10 +44,20 @@ def map_exercise_detail(res):
 
 
 async def get_exercises_by_body_part_request(name) -> List[Exercise]:
+    parts = {0: "pectoralis major",
+             1: "biceps",
+             2: "abdominals",
+             6: "deltoid",
+             9: "external oblique",
+             13: "quadriceps",
+             14: "hamstrings",
+             19: "triceps",
+             20: "gluteus medius",
+             21: "gluteus maximus"}
     if name != '':
         querystring = {"primaryMuscle": name}
     else:
-        querystring = {"primaryMuscle": "pectoralis major"}
+        querystring = {"primaryMuscle": random.choice(list(parts.values()))}
     response = requests.request("GET", url, headers=headers, params=querystring)
     res = map(map_exercise, response.json())
     if res:
