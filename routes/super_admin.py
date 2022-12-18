@@ -125,7 +125,7 @@ async def disable_admin(admin: str):
 @router.get("/get-admin-codes/{center}", response_description="Admin data retrieved", response_model=Response,
             dependencies=[Depends(super_admin_validate_token)])
 async def get_admin_codes(center: str):
-    emails = await AddAdminData.find_many({"code": center}).to_list()
+    emails = await AddAdminData.find_many({"center": center}).to_list()
     return {
         "status_code": 200,
         "response_type": "success",
