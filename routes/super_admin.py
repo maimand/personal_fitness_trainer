@@ -1,11 +1,14 @@
 from fastapi import Body, APIRouter, HTTPException, Depends
 from passlib.context import CryptContext
 
-from auth.jwt_handler import sign_jwt, admin_sign_jwt
+from auth.jwt_handler import admin_sign_jwt
 from auth.super_admin import super_admin_validate_token
+from database.admin import update_admin_data_with_email
 from database.database import *
 from models.student import Response
-from models.super_admin import SuperAdmin, SuperAdminSignIn, AddAdminData
+from models.super_admin import SuperAdmin, SuperAdminSignIn, AddAdminData, Center, AddAdminRequest
+from services.gen_code import gen_code
+from services.mail import *
 
 router = APIRouter()
 
@@ -35,20 +38,34 @@ async def super_admin_login(admin_credentials: SuperAdminSignIn = Body(...)):
         return {'error': str(e)}
 
 
-@router.post("/add-admin/{admin_name}", response_model=AddAdminData, dependencies=[Depends(super_admin_validate_token)])
-async def add_admin(admin_name: str):
-    name_existed = await AddAdminData.find_one(AddAdminData.fullname == admin_name)
+@router.post("/add-admin", response_model=AddAdminData, dependencies=[Depends(super_admin_validate_token)])
+async def add_admin_to_center(request: AddAdminRequest):
+    name_existed = await AddAdminData.find_one(AddAdminData.email == request.email)
     if name_existed:
         raise HTTPException(
             status_code=404,
-            detail="Name is already existed"
+            detail="Email is already existed"
         )
-    admin = AddAdminData(fullname=admin_name, code=hash_helper.encrypt(admin_name))
-    new_admin = await add_admin_code(admin)
-    return new_admin
+    code = gen_code()
+    send_email(request.email, code)
+    new_admin_request = AddAdminData(email=request.email, code=code, center=request.center)
+    new_request = await new_admin_request.create()
+    return new_request
 
 
-@router.delete("/delete/{id}", response_description="Admin deleted from the database"
+@router.post("/add-center", response_model=Center, dependencies=[Depends(super_admin_validate_token)])
+async def add_center(center: Center):
+    name_existed = await Center.find_one(Center.email == center.email)
+    if name_existed:
+        raise HTTPException(
+            status_code=404,
+            detail="Center is already existed"
+        )
+    new_center = await center.create()
+    return new_center
+
+
+@router.delete("/delete/{id}", response_description="Admin hard deleted from the database"
     , dependencies=[Depends(super_admin_validate_token)])
 async def delete_admin(id: PydanticObjectId):
     deleted_log = await delete_admin_data(id)
@@ -79,13 +96,51 @@ async def get_admins():
     }
 
 
-@router.get("/get-admin-codes", response_description="Admin data retrieved", response_model=Response,
+@router.get("/disable-admin/{admin}", response_description="Admin data retrieved", response_model=Response,
             dependencies=[Depends(super_admin_validate_token)])
-async def get_admin_codes():
-    admins = await retrieve_admin_code()
+async def disable_admin(admin: str):
+    admins = await update_admin_data_with_email(admin, {'active': False})
+    send_disable_email(admin)
     return {
         "status_code": 200,
         "response_type": "success",
         "description": "Students data retrieved successfully",
         "data": admins
+    }
+
+
+@router.get("/enable-admin/{admin}", response_description="Admin data retrieved", response_model=Response,
+            dependencies=[Depends(super_admin_validate_token)])
+async def disable_admin(admin: str):
+    admins = await update_admin_data_with_email(admin, {'active': True})
+    send_enable_email(admin)
+    return {
+        "status_code": 200,
+        "response_type": "success",
+        "description": "Students data retrieved successfully",
+        "data": admins
+    }
+
+
+@router.get("/get-admin-codes/{center}", response_description="Admin data retrieved", response_model=Response,
+            dependencies=[Depends(super_admin_validate_token)])
+async def get_admin_codes(center: str):
+    emails = await AddAdminData.find_many({"code": center}).to_list()
+    return {
+        "status_code": 200,
+        "response_type": "success",
+        "description": "Students data retrieved successfully",
+        "data": emails
+    }
+
+
+@router.get("/get-center", response_description="Admin data retrieved", response_model=Response,
+            dependencies=[Depends(super_admin_validate_token)])
+async def get_admin_codes():
+    emails = await Center.all().to_list()
+    return {
+        "status_code": 200,
+        "response_type": "success",
+        "description": "Students data retrieved successfully",
+        "data": emails
     }

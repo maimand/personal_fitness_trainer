@@ -17,6 +17,11 @@ hash_helper = CryptContext(schemes=["bcrypt"])
 async def user_login(user_credentials: UserSignIn = Body(...)):
     admin_exists = await User.find_one(User.email == user_credentials.username)
     if admin_exists:
+        if not admin_exists.active:
+            raise HTTPException(
+                status_code=403,
+                detail="User not activated. Please contact admin to activate."
+            )
         password = hash_helper.verify(
             user_credentials.password, admin_exists.password)
         if password:
