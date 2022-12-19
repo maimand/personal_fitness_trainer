@@ -8,7 +8,7 @@ from database.logs import retrieve_exercise_log, retrieve_food_log
 from database.user import update_user_data_with_email
 from models.admin import Admin, AdminData, AdminSignIn
 from models.student import Response
-from models.super_admin import AddAdminData
+from models.super_admin import AddAdminData, Center
 from models.user import User
 from services.mail import send_enable_email, send_disable_email
 
@@ -135,7 +135,7 @@ async def get_food_logs(email: str):
 
 @router.get("/get-users", response_description="Users data retrieved", response_model=Response)
 async def get_users(admin: Admin = Depends(admin_validate_token)):
-    users = await User.find_many({"code": admin.center, 'active': True}).to_list()
+    users = await User.find_many({"code": admin.center, 'request': False}).to_list()
     return {
         "status_code": 200,
         "response_type": "success",
@@ -144,9 +144,9 @@ async def get_users(admin: Admin = Depends(admin_validate_token)):
     }
 
 
-@router.get("/get-inactive-users", response_description="Users data retrieved", response_model=Response)
-async def get_inactive_users(admin: Admin = Depends(admin_validate_token)):
-    users = await User.find_many({"code": admin.center, 'active': False}).to_list()
+@router.get("/get-request-users", response_description="Users data retrieved", response_model=Response)
+async def get_request_users(admin: Admin = Depends(admin_validate_token)):
+    users = await User.find_many({"code": admin.center, 'request': True}).to_list()
     return {
         "status_code": 200,
         "response_type": "success",
@@ -157,6 +157,8 @@ async def get_inactive_users(admin: Admin = Depends(admin_validate_token)):
 
 @router.get("/get-code", response_description="Code data retrieved", response_model=Response)
 async def get_code(admin: Admin = Depends(admin_validate_token)):
+    center = await  Center.find_one({'code': admin.center})
+    admin.centerName = center.fullname
     return {
         "status_code": 200,
         "response_type": "success",
@@ -169,6 +171,18 @@ async def get_code(admin: Admin = Depends(admin_validate_token)):
             dependencies=[Depends(admin_validate_token)])
 async def reset_password(email: str):
     res = await update_user_data_with_email(email, {'password': hash_helper.encrypt('000000')})
+    return {
+        "status_code": 200,
+        "response_type": "success",
+        "description": "Code data retrieved successfully",
+        "data": res
+    }
+
+
+@router.get("/accept/{email}", response_description="Code data retrieved", response_model=Response,
+            dependencies=[Depends(admin_validate_token)])
+async def accept_user(email: str):
+    res = await update_user_data_with_email(email, {'request': False, 'active': True})
     return {
         "status_code": 200,
         "response_type": "success",

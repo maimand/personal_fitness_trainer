@@ -11,6 +11,7 @@ class Admin(Document):
     password: str
     code: str
     center: Optional[str]
+    centerName: Optional[str]
     active: bool = False
 
     class Collection:
@@ -23,6 +24,7 @@ class Admin(Document):
                 "email": "abdul@youngest.dev",
                 "password": "3xt3m#",
                 "center": "cali",
+                "centerName": "california",
                 "code": "123456"
             }
         }

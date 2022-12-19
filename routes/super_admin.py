@@ -40,7 +40,7 @@ async def super_admin_login(admin_credentials: SuperAdminSignIn = Body(...)):
 
 @router.post("/add-admin", response_model=AddAdminData, dependencies=[Depends(super_admin_validate_token)])
 async def add_admin_to_center(request: AddAdminRequest):
-    name_existed = await AddAdminData.find_one(AddAdminData.email == request.email)
+    name_existed = await AddAdminData.find_one({'center': request.center, 'email': request.email})
     if name_existed:
         raise HTTPException(
             status_code=404,
