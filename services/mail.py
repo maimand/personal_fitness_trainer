@@ -59,5 +59,3 @@ def send_enable_email(email: str):
         server.login(sender_email, password)
         server.send_message(msg)
         server.quit()
-
-send_email('manmaihuu@gmail.com', '123456')
