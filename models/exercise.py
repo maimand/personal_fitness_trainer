@@ -38,7 +38,7 @@ class ExerciseDetail(BaseModel):
 class ExerciseLog(Document):
     user: str
     exerciseName: str
-    time: datetime = datetime.now(timezone.utc)
+    time: datetime
     reps: int
     totalCaloriesBurn: int
 

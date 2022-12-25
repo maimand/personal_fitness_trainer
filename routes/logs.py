@@ -29,25 +29,25 @@ async def get_food_logs(user: User = Depends(user_validate_token)):
     return {
         "status_code": 200,
         "response_type": "success",
-        "description": "Students data retrieved successfully",
+        "description": "Food logs data retrieved successfully",
         "data": logs
     }
 
 
 @router.get("/body-logs", response_description="Body logs retrieved", response_model=Response)
-async def get_food_logs(user: User = Depends(user_validate_token)):
+async def get_body_logs(user: User = Depends(user_validate_token)):
     logs = await retrieve_user_log(user.email)
     return {
         "status_code": 200,
         "response_type": "success",
-        "description": "Students data retrieved successfully",
+        "description": "Body logs data retrieved successfully",
         "data": logs
     }
 
 
 @router.post("/food-logs", response_description="Food logs added into the database", response_model=Response)
 async def add_food_log(user1: User = Depends(user_validate_token), body: FoodLogBody = Body(...)):
-    food_log = FoodLog(user=user1.email, foodId=body.foodId, foodName=body.foodName,
+    food_log = FoodLog(user=user1.email, foodId=body.foodId, foodName=body.foodName, time=datetime.now(timezone.utc),
                        number=body.number, totalCaloriesIntake=body.totalCaloriesIntake)
     new_log = await add_food_log_to_db(food_log)
     return {
@@ -60,7 +60,7 @@ async def add_food_log(user1: User = Depends(user_validate_token), body: FoodLog
 
 @router.post("/body-logs", response_description="Body logs added into the database", response_model=Response)
 async def add_body_log(user1: User = Depends(user_validate_token), body: UserLogBody = Body(...)):
-    body_log = UserLog(user=user1.email, image=body.image)
+    body_log = UserLog(user=user1.email, image=body.image, time=datetime.now(timezone.utc))
     new_log = await add_user_log(body_log)
     return {
         "status_code": 200,
@@ -91,7 +91,7 @@ async def delete_food_log(id: PydanticObjectId):
 
 @router.post("/exercises-logs", response_description="Exercise logs added into the database", response_model=Response)
 async def add_exercise_log(user1: User = Depends(user_validate_token), body: ExerciseLogBody = Body(...)):
-    exercise_log = ExerciseLog(user=user1.email, exerciseName=body.exerciseName,
+    exercise_log = ExerciseLog(user=user1.email, exerciseName=body.exerciseName, time=datetime.now(timezone.utc),
                                reps=body.reps, totalCaloriesBurn=body.totalCaloriesBurn)
     new_log = await add_exercise_log_to_db(exercise_log)
     return {

@@ -123,7 +123,7 @@ class UpdateUserPasswordModel(BaseModel):
 class UserLog(Document):
     user: str
     image: str
-    time: datetime = datetime.now(timezone.utc)
+    time: datetime
 
     class Collection:
         name = "user-log"

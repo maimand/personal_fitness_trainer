@@ -34,7 +34,7 @@ class FoodLog(Document):
     user: str
     foodId: str
     foodName: str
-    time: datetime = datetime.now(timezone.utc)
+    time: datetime
     number: int
     totalCaloriesIntake: int
 
