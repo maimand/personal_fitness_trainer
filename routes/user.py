@@ -4,7 +4,7 @@ from passlib.context import CryptContext
 from auth.jwt_handler import sign_jwt
 from auth.user import user_validate_token
 from database.user import add_user, update_user_data
-from models.super_admin import AddAdminData
+from models.super_admin import AddAdminData, Center
 from models.user import *
 from auth.jwt_bearer import JWTBearer
 
@@ -56,9 +56,9 @@ async def get_user(user: User = Depends(user_validate_token)):
     return user
 
 
-@router.get("/get-center-info", response_model=AddAdminData, response_description='Get current center info')
+@router.get("/get-center-info", response_model=Center, response_description='Get current center info')
 async def get_center(user: User = Depends(user_validate_token)):
-    center = await AddAdminData.find_one({"code": user.code})
+    center = await Center.find_one({"code": user.code})
     return center
 
 

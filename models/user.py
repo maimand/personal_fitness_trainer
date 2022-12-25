@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime
 
 from beanie import Document
 from fastapi.security import HTTPBasicCredentials
@@ -65,6 +65,7 @@ class UserData(BaseModel):
 class DetailUserData(BaseModel):
     fullname: str
     email: EmailStr
+    code: Optional[str]
     height: Optional[float]
     weight: Optional[float]
     fatPercent: Optional[float]
