@@ -56,7 +56,7 @@ def get_all_food_data(food) -> List[Food]:
     foods = []
     if food:
         for ind in df.index:
-            if SequenceMatcher(None, df['Normalized'][ind], food).ratio() > 0.4:
+            if SequenceMatcher(None, df['Normalized'][ind], food).ratio() > 0.6:
                 selected_row = df.iloc[[ind]]
                 foods.append(selected_row.values[0])
     else:
