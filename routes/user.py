@@ -47,6 +47,8 @@ async def user_signup(user: User = Body(...)):
             detail="User with email supplied already exists"
         )
     user.password = hash_helper.encrypt(user.password)
+    if not user.code:
+        user.active = True
     new_admin = await add_user(user)
     return new_admin
 
