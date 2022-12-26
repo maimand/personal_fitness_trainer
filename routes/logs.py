@@ -1,3 +1,5 @@
+from datetime import timezone
+
 from beanie import PydanticObjectId
 from database.logs import add_exercise_log_to_db, retrieve_exercise_log, delete_exercise_log_from_db, \
     add_food_log_to_db, retrieve_food_log, delete_food_log_from_db, retrieve_user_log
