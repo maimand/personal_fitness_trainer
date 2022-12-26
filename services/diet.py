@@ -43,11 +43,11 @@ def map_list_to_food(input_list) -> Food:
     return Food(
         id=input_list[7], name=input_list[0],
         ration=input_list[1],
-        calo=input_list[2],
-        protein=input_list[3],
-        fat=input_list[4],
-        carb=input_list[5],
-        fiber=input_list[6],
+        calo=float(input_list[2]),
+        protein=float(input_list[3]),
+        fat=float(input_list[4]),
+        carb=float(input_list[5]),
+        fiber=float(input_list[6]),
         image=input_list[8],
     )
 
