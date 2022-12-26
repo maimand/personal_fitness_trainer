@@ -10,9 +10,14 @@ router = APIRouter()
 
 @router.get("/", response_description="All food retrieved", response_model=Page[Food])
 async def get_all_food(food: str = ''):
-    res = get_all_food_data(food)
-    r = paginate(res)
-    return r
+    try:
+        res = get_all_food_data(food)
+        r = paginate(res)
+        return r
+    except:
+        res = get_all_food_data('com')
+        r = paginate(res)
+        return r
 
 
 @router.get("/{name}", response_description="Exercise retrieved", response_model=Response)
